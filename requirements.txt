@@ -5,5 +5,3 @@ streamlit==1.35.0
 Pillow==10.4.0
 PyYAML==6.0.2
 pandas==2.2.2
-torch==2.3.1
-torchvision==0.18.1

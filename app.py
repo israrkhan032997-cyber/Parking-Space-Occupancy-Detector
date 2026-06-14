@@ -16,11 +16,11 @@ import os
 from pathlib import Path
 from typing import Optional
 
-# Force OpenCV to run without GUI/display — required on Streamlit Cloud (Linux headless)
+# Force headless OpenCV before any import — required on Streamlit Cloud
 os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "0"
 os.environ["DISPLAY"] = ""
 
-import cv2
+# Use PIL for all image I/O — avoids libGL dependency entirely
 import numpy as np
 import streamlit as st
 from PIL import Image
@@ -173,14 +173,14 @@ def pil_to_bgr(pil_image: Image.Image) -> np.ndarray:
     Returns:
         A ``uint8`` BGR NumPy array.
     """
-    # Ensure we work in RGB first, then convert channel order to BGR
+    # Convert to RGB first, then flip channel order to BGR
     rgb_array: np.ndarray = np.array(pil_image.convert("RGB"), dtype=np.uint8)
-    bgr_array: np.ndarray = cv2.cvtColor(rgb_array, cv2.COLOR_RGB2BGR)
+    bgr_array: np.ndarray = rgb_array[:, :, ::-1].copy()  # RGB → BGR without cv2
     return bgr_array
 
 
 def bgr_to_bytes(bgr_image: np.ndarray, ext: str = ".png") -> bytes:
-    """Encode a BGR NumPy array to raw image bytes.
+    """Encode a BGR NumPy array to raw image bytes using PIL.
 
     Args:
         bgr_image: A ``uint8`` BGR NumPy array.
@@ -188,14 +188,15 @@ def bgr_to_bytes(bgr_image: np.ndarray, ext: str = ".png") -> bytes:
 
     Returns:
         The encoded image as a :class:`bytes` object.
-
-    Raises:
-        RuntimeError: If OpenCV fails to encode the image.
     """
-    success, buffer = cv2.imencode(ext, bgr_image)
-    if not success:
-        raise RuntimeError(f"cv2.imencode failed for extension '{ext}'.")
-    return io.BytesIO(buffer.tobytes()).getvalue()
+    # Flip BGR → RGB for PIL
+    rgb_array: np.ndarray = bgr_image[:, :, ::-1].copy()
+    pil_img = Image.fromarray(rgb_array)
+    buf = io.BytesIO()
+    fmt = ext.lstrip(".").upper()
+    fmt = "JPEG" if fmt == "JPG" else fmt
+    pil_img.save(buf, format=fmt)
+    return buf.getvalue()
 
 
 def run_inference(
@@ -385,8 +386,8 @@ def main() -> None:
 
     with col_result:
         st.subheader("🔍 Detection Result")
-        # Convert annotated BGR back to RGB for Streamlit display
-        annotated_rgb: np.ndarray = cv2.cvtColor(annotated_bgr, cv2.COLOR_BGR2RGB)
+        # Convert annotated BGR back to RGB for Streamlit display (no cv2 needed)
+        annotated_rgb: np.ndarray = annotated_bgr[:, :, ::-1].copy()
         st.image(annotated_rgb, use_container_width=True, caption="Detection Result")
 
     # -- Metrics row -------------------------------------------------------
