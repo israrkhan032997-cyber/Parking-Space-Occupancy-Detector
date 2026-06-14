@@ -1,0 +1,2 @@
+# This directory stores the trained YOLOv8 model weights.
+# After running train.py, best.pt will appear here.

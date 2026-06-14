@@ -1,0 +1,7 @@
+# Place your raw dataset files here:
+#   images/           ← parking lot images (.jpg / .png)
+#   annotations.xml   ← CVAT or PASCAL VOC XML annotations
+#   parking.csv       ← CSV annotations (optional)
+#
+# Then run:
+#   python utils/convert_annotations.py --dataset_dir dataset/raw --output_dir dataset

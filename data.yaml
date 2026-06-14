@@ -1,0 +1,19 @@
+# data.yaml
+# YOLO dataset configuration for the Parking Space Occupancy Detector.
+# Used by train.py to locate images/labels and define class names.
+
+# Root path of the dataset (relative to the project root where train.py is run)
+path: ./dataset
+
+# Relative paths from 'path' to train and validation image directories
+train: images/train
+val: images/val
+
+# Number of classes
+nc: 3
+
+# Class ID → human-readable name mapping
+names:
+  0: free
+  1: occupied
+  2: partially_occupied
