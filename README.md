@@ -265,5 +265,6 @@ Display Annotated Result + Statistics
 ## Parking Space Occupancy Detector App
 
 https://parking-space-occupancy-detector-2wqxvj9p8dxhx3gentxk3p.streamlit.app/
+
 🅿️ Smart Parking Occupancy Detector — Upload a parking lot image to detect free, occupied, and partially occupied spaces using YOLOv8 AI model.
 
