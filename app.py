@@ -12,8 +12,13 @@ Usage
 """
 
 import io
+import os
 from pathlib import Path
 from typing import Optional
+
+# Force OpenCV to run without GUI/display — required on Streamlit Cloud (Linux headless)
+os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "0"
+os.environ["DISPLAY"] = ""
 
 import cv2
 import numpy as np
