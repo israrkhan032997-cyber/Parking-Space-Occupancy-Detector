@@ -1,6 +1,5 @@
 #!/bin/bash
-# Force replace opencv-python with headless version
-# ultralytics pulls in opencv-python which needs libGL
-# This script runs before app startup on Streamlit Cloud
-pip uninstall -y opencv-python opencv-python-headless 2>/dev/null || true
-pip install opencv-python-headless --quiet
+# ultralytics pulls in opencv-python (GUI) as dependency
+# Force replace with headless version after all installs
+pip uninstall -y opencv-python 2>/dev/null || true
+pip install --force-reinstall opencv-python-headless --quiet
