@@ -1,7 +1,7 @@
-ultralytics==8.4.66
-opencv-python-headless==4.10.0.84
-numpy==1.26.4
-streamlit==1.35.0
-Pillow==10.4.0
-PyYAML==6.0.2
-pandas==2.2.2
+ultralytics
+opencv-python-headless
+numpy
+streamlit
+Pillow
+PyYAML
+pandas
